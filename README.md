@@ -222,4 +222,118 @@ CREATE TABLE Review (
     Rating DECIMAL(2, 1) NOT NULL CHECK (Rating BETWEEN 0 AND 5), 
     Comment TEXT, 
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID) ON DELETE CASCADE 
-); 
+);
+
+```
+---
+
+## 📊 Sample Queries
+
+The database supports a wide range of queries to extract meaningful information for different user roles. Here are three key examples:
+
+---
+
+### 🥇 Top Performing Restaurants by Average Rating and Order Count
+
+Identifies restaurants with high average ratings and significant order volumes (minimum 5 reviews).
+
+```sql
+SELECT 
+    r.RestaurantID, 
+    r.Name, 
+    r.AverageRating, 
+    COUNT(o.OrderID) AS TotalOrders
+FROM Restaurant r
+JOIN Orders o ON r.RestaurantID = o.RestaurantID
+GROUP BY r.RestaurantID, r.Name, r.AverageRating
+HAVING COUNT(*) >= 5
+ORDER BY r.AverageRating DESC, TotalOrders DESC
+LIMIT 10;
+```
+### 💰 Monthly Revenue Breakdown for Each Restaurant
+
+Calculates gross and net revenue per restaurant per month from completed payments.
+
+```sql
+SELECT 
+    r.RestaurantID,
+    r.Name AS RestaurantName,
+    TO_CHAR(p.PaymentDate, 'YYYY-MM') AS Month,
+    SUM(p.TotalAmount) AS GrossRevenue,
+    SUM(p.RestaurantEarnings) AS NetRevenue
+FROM Payment p
+JOIN Orders o ON p.OrderID = o.OrderID
+JOIN Restaurant r ON o.RestaurantID = r.RestaurantID
+WHERE p.PaymentStatus = 'Completed'
+GROUP BY r.RestaurantID, r.Name, TO_CHAR(p.PaymentDate, 'YYYY-MM')
+ORDER BY Month DESC, r.RestaurantID;
+```
+
+### 🚚 Delivery Agent Performance Overview
+
+Summarizes delivery agent performance including order deliveries, earnings, and average ratings.
+
+```sql
+SELECT 
+    da.DeliveryAgentID,
+    u.Name AS AgentName,
+    COUNT(DISTINCT o.OrderID) AS OrdersDelivered,
+    COALESCE(SUM(ph.TotalPayout), 0) AS TotalEarnings,
+    COALESCE(AVG(r.Rating), 0) AS AverageRating
+FROM DeliveryAgent da
+JOIN Users u ON da.UserID = u.UserID
+LEFT JOIN Orders o ON da.DeliveryAgentID = o.DeliveryAgentID AND o.Status = 'Delivered'
+LEFT JOIN PayoutHistory ph ON o.OrderID = ph.OrderID AND ph.PaymentStatus = 'Completed'
+LEFT JOIN Review r ON o.OrderID = r.OrderID
+GROUP BY da.DeliveryAgentID, u.Name
+ORDER BY TotalEarnings DESC;
+```
+
+
+--- 
+
+## 🛠️ How to Use
+
+To set up the **KitchenConnect** database system on your local environment, follow the steps below:
+
+
+
+### 1. Create the Database
+
+- Open your preferred SQL tool (e.g., MySQL Workbench, DBeaver, pgAdmin).
+- Create a new database schema (e.g., `KitchenConnectDB`).
+
+
+
+### 2. Build the Schema
+
+- Execute the file: **`Group13_KitchenConnect_DDLScripts.pdf`**
+- This file contains all the required `CREATE TABLE` statements to initialize your database schema.
+
+
+
+### 3. Populate with Sample Data
+
+- Run the file: **`Group13_KitchenConnect_InsertScripts.pdf`**
+- This file inserts a rich set of sample data into the tables for customers, restaurants, menu items, orders, payments, reward coins, and more.
+
+
+### 4. Run Analytical Queries
+
+- Use the queries provided in **`Group13_KitchenConnect_SQLQueries.docx`**.
+- These include analytics such as top-rated restaurants, delivery agent performance, revenue reports, and customer behavior insights.
+
+
+
+### 📁 Additional Project Files in This Repository
+
+The repository also contains:
+
+- ✅ **ER Diagram** – Visual representation of all entities and their relationships.
+- ✅ **Relational Schema** – Tabular schema with attributes, keys, and data types.
+- ✅ **Minimal Functional Dependency Set** – Refined list of essential FDs.
+- ✅ **BCNF Proofs** – Demonstration of normalization up to BCNF for all relations.
+
+---
+
+
