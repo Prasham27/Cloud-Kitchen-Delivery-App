@@ -307,20 +307,20 @@ To set up the **KitchenConnect** database system on your local environment, foll
 
 ### 2. Build the Schema
 
-- Execute the file: **`Group13_KitchenConnect_DDLScripts.pdf`**
+- Execute the file: **`DDLScripts.pdf`**
 - This file contains all the required `CREATE TABLE` statements to initialize your database schema.
 
 
 
 ### 3. Populate with Sample Data
 
-- Run the file: **`Group13_KitchenConnect_InsertScripts.pdf`**
+- Run the file: **`InsertScripts.pdf`**
 - This file inserts a rich set of sample data into the tables for customers, restaurants, menu items, orders, payments, reward coins, and more.
 
 
 ### 4. Run Analytical Queries
 
-- Use the queries provided in **`Group13_KitchenConnect_SQLQueries.docx`**.
+- Use the queries provided in **`SQLQueries.docx`**.
 - These include analytics such as top-rated restaurants, delivery agent performance, revenue reports, and customer behavior insights.
 
 
