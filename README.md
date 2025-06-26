@@ -330,7 +330,6 @@ To set up the **KitchenConnect** database system on your local environment, foll
 The repository also contains:
 
 - ✅ **ER Diagram** – Visual representation of all entities and their relationships.
-- ✅ **Relational Schema** – Tabular schema with attributes, keys, and data types.
 - ✅ **Minimal Functional Dependency Set** – Refined list of essential FDs.
 - ✅ **BCNF Proofs** – Demonstration of normalization up to BCNF for all relations.
 
